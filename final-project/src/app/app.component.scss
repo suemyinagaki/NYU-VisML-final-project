@@ -1,0 +1,18 @@
+.main-wrapper {
+    padding: 0px;
+    display: flex;
+}
+
+.components {
+    height: 98vh;
+    display: flex;
+    float: left;
+    // border: 1px solid black;
+    // border-radius: 7px;
+    margin: 1px;
+}  
+
+.left-component{
+    display: block !important;
+    position: relative;
+}

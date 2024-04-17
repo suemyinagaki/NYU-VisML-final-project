@@ -1,0 +1,8 @@
+<div class="wrapper">
+    <div class="title">
+        Query Result
+    </div>
+    <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+        <div *cdkVirtualFor="let item of query_result" class="example-item">{{item || 'Loading...'}}</div>
+    </cdk-virtual-scroll-viewport>
+</div>
