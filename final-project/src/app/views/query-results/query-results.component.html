@@ -3,6 +3,11 @@
         Query Result
     </div>
     <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-        <div *cdkVirtualFor="let item of query_result" class="example-item">{{item || 'Loading...'}}</div>
+        @for (item of this.queries; track item.people) {
+            <li>{{ item.people }}</li>
+            } @empty {
+            <li>There are no items.</li>
+            }
+        <!-- <div *cdkVirtualFor="let item of this.queries" class="example-item">{{item || 'Loading...'}}</div> -->
     </cdk-virtual-scroll-viewport>
 </div>

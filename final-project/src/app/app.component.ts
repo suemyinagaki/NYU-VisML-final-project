@@ -23,4 +23,9 @@ import { MetricsComponent } from './views/metrics/metrics.component';
 })
 export class AppComponent {
   title = 'final-project';
+  public query_result: any[] = [];
+  
+  public getResult(event: any){
+    this.query_result = event;
+  }
 }

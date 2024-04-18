@@ -3,30 +3,38 @@
         Query Parameters
     </div>
     <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Overlapping Bounding Box Area</div>
-    <mat-slider min="0" max="200" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
-        <input matSliderThumb>
+    <mat-slider min="0" max="10" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
+        <input matSliderThumb [(ngModel)]="overlap_area">
     </mat-slider>
     <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Number of People in the Scene</div>
-    <mat-slider min="0" max="200" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
-        <input matSliderThumb>
+    <mat-slider min="0" max="10" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
+        <input matSliderThumb [(ngModel)]="people_scene">
     </mat-slider>
+    <!-- <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Number of Cars in the Scene</div>
+    <mat-slider min="0" max="10" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
+        <input matSliderThumb>
+    </mat-slider> -->
     <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Bot-SORT Confidence</div>
-    <mat-slider min="0" max="200" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
-        <input matSliderThumb>
+    <mat-slider min="0" max="1" step="0.1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
+        <input matSliderThumb [(ngModel)]="bot_confidence">
     </mat-slider>
-    <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Model2 Confidence</div>
-    <mat-slider min="0" max="200" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
-        <input matSliderThumb>
+    <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">ByteTrack Confidence</div>
+    <mat-slider min="0" max="1" step="0.1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
+        <input matSliderThumb [(ngModel)]="byte_confidence">
     </mat-slider>
     <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Sort By</div>
     <mat-chip-listbox aria-label="Sort By" style="margin: 3px;">
-        <mat-chip-option color="accent" selected matTooltip="Overlapping Area">Area</mat-chip-option>
-        <mat-chip-option color="accent" matTooltip="Number of People in the scene">People</mat-chip-option>
-        <mat-chip-option color="accent" matTooltip="Bot-SORT Confidence">Bot-SORT</mat-chip-option>
-        <mat-chip-option color="accent" matTooltip="Model2 Confidence">Model2</mat-chip-option>
+        <mat-chip-option color="accent" (click)="this.sort_by='area'" selected matTooltip="Overlapping Area">Area</mat-chip-option>
+        <mat-chip-option color="accent" (click)="this.sort_by='people'" matTooltip="Number of People in the scene">People</mat-chip-option>
+        <mat-chip-option color="accent" (click)="this.sort_by='bot'" matTooltip="Bot-SORT Confidence">Bot-SORT</mat-chip-option>
+        <mat-chip-option color="accent" (click)="this.sort_by='byte'" matTooltip="Model2 Confidence">ByteTrack</mat-chip-option>
     </mat-chip-listbox>
     <!-- <mat-form-field class="example-margin example-width">
         <mat-label>Query Limit</mat-label>
         <input matInput type="number" placeholder="200">
     </mat-form-field> -->
+    <div style="text-align: end; margin-top: 10px;margin-right:10px; margin-bottom: 10px; padding-left: 10px;">
+        <button mat-stroked-button color="accent" (click)="clearParameters()" style="margin-right: 5px;">Clear</button>
+        <button mat-flat-button color="accent" (click)="query()">Query</button>
+    </div>
 </div>
