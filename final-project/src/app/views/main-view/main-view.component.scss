@@ -21,3 +21,19 @@
     margin: auto;
     display: block;
 }
+
+.image-container {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+
+.image-container img {
+    display: block;
+    width: 100%;
+}
+
+.image-container p {
+    margin-top: 5px;
+    font-weight: bold;
+}

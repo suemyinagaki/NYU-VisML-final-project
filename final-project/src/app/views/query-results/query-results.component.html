@@ -3,11 +3,15 @@
         Query Result
     </div>
     <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-        @for (item of this.queries; track item.people) {
-            <li>{{ item.people }}</li>
-            } @empty {
-            <li>There are no items.</li>
-            }
-        <!-- <div *cdkVirtualFor="let item of this.queries" class="example-item">{{item || 'Loading...'}}</div> -->
+        <div *cdkVirtualFor="let item of this.queries" class="example-item">
+            <mat-card (click)="sendFrame(item)">
+                <mat-card-header>
+                  <mat-card-subtitle>Video {{item.video}} - Frame {{item.frame}}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    Overlapping area: {{item.area}}; No. of People: {{item.people}}; Bot-SORT Confidence: {{item.bot_conf}}; ByteTrack Confidence: {{item.byte_conf}}
+                </mat-card-content>
+            </mat-card>
+        </div>
     </cdk-virtual-scroll-viewport>
 </div>

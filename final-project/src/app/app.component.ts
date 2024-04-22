@@ -24,8 +24,12 @@ import { MetricsComponent } from './views/metrics/metrics.component';
 export class AppComponent {
   title = 'final-project';
   public query_result: any[] = [];
-  
+  public current_frame: any = null;
   public getResult(event: any){
     this.query_result = event;
+  }
+
+  public getFrame(event: any){
+    this.current_frame = event;
   }
 }

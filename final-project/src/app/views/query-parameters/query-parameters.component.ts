@@ -48,7 +48,9 @@ export class QueryParametersComponent {
         area: Math.floor(Math.random() * 11),
         people: Math.floor(Math.random() * 11),
         bot_conf: parseFloat(Math.random().toFixed(1)),
-        byte_conf: parseFloat(Math.random().toFixed(1))
+        byte_conf: parseFloat(Math.random().toFixed(1)),
+        video: `video ${Math.floor(Math.random() * 5)}`,
+        frame: `video ${Math.floor(Math.random() * 500)}`,
       };
       this.mock_data.push(obj);
     }
@@ -77,7 +79,6 @@ export class QueryParametersComponent {
     }else{
       this.result.sort((a, b) => a.byte_conf - b.byte_conf);
     }
-    console.log(this.result);
     this.newItemEvent.emit(this.result);
   }
 }

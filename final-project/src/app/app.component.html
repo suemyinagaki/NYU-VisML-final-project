@@ -1,10 +1,10 @@
 <div class="main-wrapper" style="top: 0px; left: 0px; width: 100%; height: 100%; position: absolute; z-index: 1;">
    <div class="components left-component" style="width: 20vw;">
     	 <div><app-query-parameters (newItemEvent)="getResult($event)"></app-query-parameters></div>
-         <div><app-query-results [query_result]="this.query_result"></app-query-results></div>
+         <div><app-query-results [query_result]="this.query_result" (newFrameEvent)="getFrame($event)"></app-query-results></div>
     </div>
     <div class="components" style="width: 60vw;">
-        <div style="width: 100%;"><app-main-view></app-main-view></div>
+        <div style="width: 100%;"><app-main-view [current_frame]="this.current_frame"></app-main-view></div>
     </div>
     <div class="components" style="width: 20vw;">
         <div  style="width: 100%;"><app-metrics></app-metrics></div>
