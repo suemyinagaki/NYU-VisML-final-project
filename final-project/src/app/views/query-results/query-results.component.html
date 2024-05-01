@@ -6,10 +6,10 @@
         <div *cdkVirtualFor="let item of this.queries" class="example-item">
             <mat-card (click)="sendFrame(item)">
                 <mat-card-header>
-                  <mat-card-subtitle>Video {{item.video}} - Frame {{item.frame}}</mat-card-subtitle>
+                  <mat-card-subtitle>{{item.filename}} - Frame {{item.frame}}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                    Overlapping area: {{item.area}}; No. of People: {{item.people}}; Bot-SORT Confidence: {{item.bot_conf}}; ByteTrack Confidence: {{item.byte_conf}}
+                    Overlapping area: {{item.area}}; No. of People: {{item.n_people}}; Bot-SORT Confidence: {{item['botsort']['score']}}; ByteTrack Confidence: {{item.byte_conf}}
                 </mat-card-content>
             </mat-card>
         </div>

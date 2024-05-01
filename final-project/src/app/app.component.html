@@ -3,10 +3,10 @@
     	 <div><app-query-parameters (newItemEvent)="getResult($event)"></app-query-parameters></div>
          <div><app-query-results [query_result]="this.query_result" (newFrameEvent)="getFrame($event)"></app-query-results></div>
     </div>
-    <div class="components" style="width: 60vw;">
-        <div style="width: 100%;"><app-main-view [current_frame]="this.current_frame"></app-main-view></div>
+    <div class="components" style="width: 80vw;">
+        <div style="width: 100%;"><app-main-view [current_frame]="this.current_frame" (newFrame)="getFrameSlider($event)"></app-main-view></div>
     </div>
     <div class="components" style="width: 20vw;">
-        <div  style="width: 100%;"><app-metrics></app-metrics></div>
+        <div  style="width: 100%;"><app-metrics [current_frame]="this.current_frame" [frame_slider]="this.frame_slider"></app-metrics></div>
     </div>
 </div>

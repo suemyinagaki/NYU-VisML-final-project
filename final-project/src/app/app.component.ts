@@ -25,11 +25,17 @@ export class AppComponent {
   title = 'final-project';
   public query_result: any[] = [];
   public current_frame: any = null;
+  public frame_slider: number = 0;
+
   public getResult(event: any){
     this.query_result = event;
   }
 
   public getFrame(event: any){
     this.current_frame = event;
+  }
+
+  public getFrameSlider(event: any){
+    this.frame_slider = event;
   }
 }

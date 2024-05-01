@@ -3,40 +3,113 @@
         Analytics Panel
     </div>
     <div style="text-align: justify; width: 100%;">
-        <mat-radio-group aria-label="Select an option" style="display: inline-block; margin-right: 10%; margin-left: 20%;" [(ngModel)]="displayMode">
+        <mat-radio-group aria-label="Select an option" style="display: inline-block; margin-right: 10%; margin-left: 22.5%;" [(ngModel)]="displayMode">
             <label>Display:</label>
-            <mat-radio-button value="bot">Bot-SORT</mat-radio-button>
-            <mat-radio-button value="byte">ByteTrack</mat-radio-button>
-            <mat-radio-button value="both">Both</mat-radio-button>
+            <mat-radio-button value="bot" (change)="handleValueChange($event)">Bot-SORT</mat-radio-button>
+            <mat-radio-button value="byte" (change)="handleValueChange($event)">ByteTrack</mat-radio-button>
+            <mat-radio-button value="both" (change)="handleValueChange($event)">Both</mat-radio-button>
         </mat-radio-group>
-        <div style="text-align: end; margin-right: 15%; margin-bottom: 10px; display: inline-block;"><mat-slide-toggle>Show Tags</mat-slide-toggle></div>
+        <div style="text-align: end; margin-right: 15%; margin-bottom: 10px; display: inline-block;"><mat-slide-toggle [(ngModel)]="show_tag">Show Tags</mat-slide-toggle></div>
     </div>
+    <!-- <div id="openseadragon1" #openseadragon1 style="width: 45%;"></div> -->
     <div>
         @if(displayMode==='bot'){
-            <div class="image-container" style="width: 60% !important; margin-left: 20% !important;">
+            <div class="image-container" style="width: 45% !important; margin-left: 27.5% !important;">
                 <p>Bot-SORT</p>
-                <img src="{{ '../../../assets/frames/img1/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" alt="Bot-SORT">
+                @if(!show_tag){
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{ '../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img id="myimage" src="{{ '../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="Bot-SORT"> -->
+                }@else{
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{ '../../../assets/data/output/' + this.current_filename + '/botsort/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img id="myimage" src="{{ '../../../assets/data/output/' + this.current_filename + '/botsort/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="Bot-SORT"> -->
+                }
             </div>
-        }@else if(displayMode=='byte'){
-            <div class="image-container" style="width: 60% !important; margin-left: 20% !important;">
+
+           
+        }@else if(displayMode==='byte'){
+            <div class="image-container" style="width: 45% !important; margin-left: 27.5% !important;">
                 <p>ByteTrack</p>
-                <img src="{{ '../../../assets/frames/img1/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" alt="ByteTrack">
+                @if(!show_tag){
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{ '../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img src="{{ '../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="ByteTrack"> -->
+                }@else{
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{ '../../../assets/data/output/' + this.current_filename + '/bytetrack/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img src="{{ '../../../assets/data/output/' + this.current_filename + '/bytetrack/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="ByteTrack"> -->
+                }
             </div>
         }@else{
             <div class="image-container" style="width: 45% !important; margin-left: 4.5% !important;">
                 <p>Bot-SORT</p>
-                <img src="{{ '../../../assets/frames/img1/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" alt="Bot-SORT">
+                @if(!show_tag){
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{'../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg'}}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img src="{{ '../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="Bot-SORT"> -->
+                }@else{
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{ '../../../assets/data/output/' + this.current_filename + '/botsort/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img src="{{ '../../../assets/data/output/' + this.current_filename + '/botsort/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="Bot-SORT"> -->
+                }
             </div>
             
             <div class="image-container" style="width: 45% !important; margin-left: 1% !important;">
                 <p>ByteTrack</p>
-                <img src="{{ '../../../assets/frames/img1/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" alt="ByteTrack">
+                @if(!show_tag){
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{ '../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img src="{{ '../../../assets/data/input/' + this.current_filename + '/' + this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="ByteTrack"> -->
+                }@else{
+                    <ng-magnizoom
+                        zoomMode="LENS"
+                        imageSrc="{{ '../../../assets/data/output/' + this.current_filename + '/bytetrack/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}"
+                        [imageStyle]="{ 'max-width': '100%', 'max-height': '100%' }">
+                    </ng-magnizoom>
+                    <!-- <img src="{{ '../../../assets/data/output/' + this.current_filename + '/bytetrack/' +  this.frame_slider.toString().padStart(6, '0') + '.jpg' }}" onerror="this.src='../../../assets/data/placeholder.png';" alt="ByteTrack"> -->
+                }
             </div>
         }
     </div>
     
-    <mat-slider min="1" [max]="max_frame" step="1" discrete color="accent" style="width: 60%; text-align: center; height: 50px; margin-right: 20%; margin-left: 20%;" >
+    <mat-slider min="1" [max]="max_frame" step="1" discrete color="accent" style="width: 60%; text-align: center; height: 50px; margin-right: 20%; margin-left: 20%;" (change)="handleValueChange($event)">
         <input matSliderThumb [(ngModel)]="frame_slider">
     </mat-slider>
+    @if(displayMode==='both'){
+        <button mat-button [matMenuTriggerFor]="menu">Timeline</button>
+            <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="showBotSortTimeline()">Bot-SORT</button>
+            <button mat-menu-item (click)="showByteTrackTimeline()">ByteTrack</button>
+        </mat-menu>
+    }
+    
+    @if(this.show_botsort_timeline){
+        <div id="matrix" style="text-align: center; margin-left: 2px; margin-right: 2px;"></div>
+    }
+    @else{
+        <div id="matrix" style="text-align: center; margin-left: 2px; margin-right: 2px;"></div>
+    }
 </div>
 
