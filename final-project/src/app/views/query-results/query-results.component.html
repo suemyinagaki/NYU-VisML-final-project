@@ -2,14 +2,17 @@
     <div class="title">
         Query Result
     </div>
-    <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+    <cdk-virtual-scroll-viewport itemSize="50px;" class="example-viewport">
         <div *cdkVirtualFor="let item of this.queries" class="example-item">
             <mat-card (click)="sendFrame(item)">
                 <mat-card-header>
-                  <mat-card-subtitle>{{item.filename}} - Frame {{item.frame}}</mat-card-subtitle>
+                  <mat-card-subtitle>{{item.filename}} - {{item.frame}}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                    Overlapping area: {{item.area}}; No. of People: {{item.n_people}}; Bot-SORT Confidence: {{item['botsort']['score']}}; ByteTrack Confidence: {{item.byte_conf}}
+                    No. Overlapping BBoxes: {{item["botsort"][0]["overlapping_bboxes"]}}; <br/>
+                    No. of People: {{item["botsort"][0]["n_people"]}}; <br/>
+                    Bot-SORT Confidence: {{item['botsort_avg_score']}}; <br/>
+                    ByteTrack Confidence: {{item['bytetrack_avg_score']}}
                 </mat-card-content>
             </mat-card>
         </div>

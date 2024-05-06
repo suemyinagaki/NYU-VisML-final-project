@@ -39,7 +39,7 @@ export class QueryParametersComponent {
   
   @Output() newItemEvent = new EventEmitter<any[]>();
 
-  public overlap_area: number = 0;
+  public overlap_boxes: number = 0;
   public people_scene: number = 0;
   public bot_confidence: number = 0.0;
   public byte_confidence: number = 0.0;
@@ -57,25 +57,46 @@ export class QueryParametersComponent {
   }
 
   public clearParameters(){
-    this.overlap_area = 0;
+    this.overlap_boxes = 0;
     this.people_scene = 0;
     this.bot_confidence = 0.0;
     this.byte_confidence = 0.0;
   }
   public query(){
     this.result = [];
-    this.result = d3.filter(this.real_data, d=>d.n_people >= this.people_scene && d["botsort"]["score"] <= this.bot_confidence)
+    for (let i = 0; i < this.real_data.length; i++){
+      for (let j = 0; j < this.real_data[i]["botsort"].length; j++){
+        if(!Object.keys(this.real_data[i]["botsort"][j]).includes("n_people")){
+          console.log("ERRO0 Botsort", i, j, this.real_data[i]["botsort"][j])
+        }
+      }
+      for (let j = 0; j < this.real_data[i]["bytetrack"].length; j++){
+        if(!Object.keys(this.real_data[i]["bytetrack"][j]).includes("n_people")){
+          console.log("ERRO0 Bytetrack", i, j, this.real_data[i]["bytetrack"][j])
+        }
+      }
+    }
+    let a = d3.filter(this.real_data, (d: any) => ((d["botsort"].length > 0 && d["botsort"][0]["n_people"] >= this.people_scene)))
+    console.log(a)
+
+    this.result = d3.filter(this.real_data, (d: any) => (
+      ((d["botsort"].length > 0 && d["botsort"][0]["n_people"] >= this.people_scene) ||
+      (d["bytetrack"].length > 0 && d["bytetrack"][0]["n_people"] >= this.people_scene)) && 
+      d["botsort_avg_score"] <= this.bot_confidence && 
+      d["bytetrack_avg_score"] <= this.byte_confidence && 
+      ((d["botsort"].length > 0 && d["botsort"][0]["overlapping_bboxes"] >= this.overlap_boxes) ||
+      (d["bytetrack"].length > 0 && d["bytetrack"][0]["overlapping_bboxes"] >= this.overlap_boxes))
+    ))
     
-    if (this.sort_by === 'area'){
-      console.log("area")
-      //this.result.sort((a, b) => -a.area + b.area);
+    console.log(this.result)
+    if (this.sort_by === 'overlap'){
+      this.result.sort((a, b) => -a["botsort"][0]["overlapping_bboxes"] + b["botsort"][0]["overlapping_bboxes"]);
     }else if(this.sort_by === 'people'){
-      this.result.sort((a, b) => -a.n_people + b.n_people);
+      this.result.sort((a, b) => -a["botsort"][0]["n_people"] + b["botsort"][0]["n_people"]);
     }else if(this.sort_by === 'bot'){
-      this.result.sort((a, b) => a['botsort']['score'] - b['botsort']['score']);
+      this.result.sort((a, b) => a['botsort_avg_score'] - b['botsort_avg_score']);
     }else{
-      console.log("bytetrack")
-      //this.result.sort((a, b) => a.byte_conf - b.byte_conf);
+      this.result.sort((a, b) => a['bytetrack_avg_score'] - b['bytetrack_avg_score']);
     }
     this.newItemEvent.emit(this.result);
   }

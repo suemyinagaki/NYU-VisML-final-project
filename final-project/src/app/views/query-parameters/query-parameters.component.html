@@ -2,11 +2,11 @@
     <div class="title">
         Query Parameters
     </div>
-    <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Overlapping Bounding Box Area</div>
+    <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">No. Overlapping Bounding Boxes</div>
     <mat-slider min="0" max="10" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
-        <input matSliderThumb [(ngModel)]="overlap_area">
+        <input matSliderThumb [(ngModel)]="overlap_boxes">
     </mat-slider>
-    <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Number of People in the Scene</div>
+    <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">No. People in the Scene</div>
     <mat-slider min="0" max="10" step="1" discrete color="accent" style="width: 90%; text-align: center; height: 50px">
         <input matSliderThumb [(ngModel)]="people_scene">
     </mat-slider>
@@ -24,7 +24,7 @@
     </mat-slider>
     <div style="margin-top: 3px; margin-bottom: 1px; margin-left: 6px; font-size: 15px;">Sort By</div>
     <mat-chip-listbox aria-label="Sort By" style="margin: 3px;">
-        <mat-chip-option color="accent" (click)="this.sort_by='area'" selected matTooltip="Overlapping Area">Area</mat-chip-option>
+        <mat-chip-option color="accent" (click)="this.sort_by='overlap'" selected matTooltip="Overlapping Area">Overlap</mat-chip-option>
         <mat-chip-option color="accent" (click)="this.sort_by='people'" matTooltip="Number of People in the scene">People</mat-chip-option>
         <mat-chip-option color="accent" (click)="this.sort_by='bot'" matTooltip="Bot-SORT Confidence">Bot-SORT</mat-chip-option>
         <mat-chip-option color="accent" (click)="this.sort_by='byte'" matTooltip="Model2 Confidence">ByteTrack</mat-chip-option>

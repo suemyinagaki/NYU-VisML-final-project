@@ -47,9 +47,6 @@ export class MainViewComponent {
 
   @ViewChild('canvasElement')
   canvasElement!: ElementRef;
-
-  @ViewChild('openseadragon1')
-  openseadragonElement!: ElementRef;
   
   public frame_slider: number = 1;
   public max_frame: number = 900;
@@ -77,26 +74,51 @@ export class MainViewComponent {
   public hostElement: any;
   public viewer: any = null;
   public show_botsort_timeline: boolean = true;
+  public old_structure_data: any[] = [];
 
   ngOnChanges(changes: any) {
     for (const propName in changes) {
       const chng = changes[propName];
       this.frame_slider = parseInt(chng.currentValue['frame'])
       this.current_filename = chng.currentValue['filename'];
+      this.old_structure_data = []
+      this.all_data.forEach((d: any) => {
+        let bot = d["botsort"];
+        let byte = d["bytetrack"];
+        for(let i = 0; i < bot.length; i++ ){
+          let obj = {
+            "filename": d.filename,
+            "frame": d.frame,
+            "model": "botsort",
+            "n_people": bot[i]["n_people"],
+            "people_id": bot[i]["people_id"]
+          }
+          this.old_structure_data.push(obj);
+        }
+        for(let i = 0; i < byte.length; i++ ){
+          let obj = {
+            "filename": d.filename,
+            "frame": d.frame,
+            "model": "bytetrack",
+            "n_people": byte[i]["n_people"],
+            "people_id": byte[i]["people_id"]
+          }
+          this.old_structure_data.push(obj);
+        }
+      });
       if (chng.currentValue){
-        let new_frames = this.all_data.map((d: any)=>({"filename": d.filename, frame: parseInt(d.frame), botsort: d.botsort, n_people: d.n_people}));
-        this.filtered_data = new_frames.filter((d: any) => d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
-        this.max_n_people = d3.max(this.filtered_data, d=>d.n_people);
+        let new_frames = this.old_structure_data.map((d: any)=>({"filename": d.filename, frame: d.frame, people_id: d.people_id, n_people: d.n_people, model: d.model}));
         if(this.displayMode === 'bot'){
-          this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.botsort.people_id}`)))
+          this.filtered_data = new_frames.filter((d: any) => d.model === "botsort" && d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+          this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.people_id}`)))
         }
         if(this.displayMode === 'byte'){
-          this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.bytetrack.people_id}`)))
+          this.filtered_data = new_frames.filter((d: any) => d.model === "bytetrack" && d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+          this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.people_id}`)))
         }
+        this.max_n_people = d3.max(this.filtered_data, d=>d.n_people);
         this.height = this.margin.top + this.margin.bottom + (this.max_n_people) * 10
         this.createChart(this.filtered_data);
-        
-        // this.updateChart(this.filtered_data)
       }
     }
   }
@@ -111,6 +133,31 @@ export class MainViewComponent {
   ngAfterViewInit(){
     this.http.get(this.url).subscribe(res => {
       this.all_data = res;
+    });
+    this.old_structure_data = []
+    this.all_data.forEach((d: any) => {
+      let bot = d["botsort"];
+      let byte = d["bytetrack"];
+      for(let i = 0; i < bot.length; i++ ){
+        let obj = {
+          "filename": d.filename,
+          "frame": d.frame,
+          "model": "botsort",
+          "n_people": bot[i]["n_people"],
+          "people_id": bot[i]["people_id"]
+        }
+        this.old_structure_data.push(obj);
+      }
+      for(let i = 0; i < byte.length; i++ ){
+        let obj = {
+          "filename": d.filename,
+          "frame": d.frame,
+          "model": "bytetrack",
+          "n_people": byte[i]["n_people"],
+          "people_id": byte[i]["people_id"]
+        }
+        this.old_structure_data.push(obj);
+      }
     });
   }
 
@@ -207,7 +254,7 @@ export class MainViewComponent {
       .data(data)
       .join("rect")
         .attr("x", (d: any) => this.x(d.frame))
-        .attr("y", (d: any) => this.y(`ID #${d.botsort.people_id}`))
+        .attr("y", (d: any) => this.y(`ID #${d.people_id}`))
         .attr("width", this.x.bandwidth() - 1)
         .attr("height", this.y.bandwidth() - 1)
         .attr("fill", (d: any) => '#4B0082')
@@ -220,7 +267,7 @@ export class MainViewComponent {
       .data(data)
       .join("rect")
         .attr("x", (d: any) => this.x(d.frame))
-        .attr("y", (d: any) => this.y(`ID #${d.bytetrack.people_id}`))
+        .attr("y", (d: any) => this.y(`ID #${d.people_id}`))
         .attr("width", this.x.bandwidth() - 1)
         .attr("height", this.y.bandwidth() - 1)
         .attr("fill", (d: any) => '#4B0082')
@@ -232,7 +279,7 @@ export class MainViewComponent {
       .data(data)
       .join("rect")
         .attr("x", (d: any) => this.x(d.frame))
-        .attr("y", (d: any) => this.y(`ID #${d.botsort.people_id}`))
+        .attr("y", (d: any) => this.y(`ID #${d.people_id}`))
         .attr("width", this.x.bandwidth() - 1)
         .attr("height", this.y.bandwidth() - 1)
         .attr("fill", (d: any) => '#4B0082')
@@ -243,30 +290,36 @@ export class MainViewComponent {
   }
 
   public handleValueChange(event: any){
-    let new_frames = this.all_data.map((d: any)=>({"filename": d.filename, frame: parseInt(d.frame), botsort: d.botsort, n_people: d.n_people}));
-    this.filtered_data = new_frames.filter((d: any) => d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+    let new_frames = this.old_structure_data.map((d: any)=>({"filename": d.filename, frame: d.frame, people_id: d.people_id, n_people: d.n_people, model: d.model}));
+    if(this.displayMode === 'bot'){
+      this.filtered_data = new_frames.filter((d: any) => d.model === "botsort" && d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+      this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.people_id}`)))
+    }
+    if(this.displayMode === 'byte'){
+      this.filtered_data = new_frames.filter((d: any) => d.model === "bytetrack" && d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+      this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.people_id}`)))
+    }
     this.max_n_people = d3.max(this.filtered_data, d=>d.n_people);
-    this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.botsort.people_id}`)))
     this.height = this.margin.top + this.margin.bottom + (this.max_n_people) * 10
     this.createChart(this.filtered_data);
     this.newFrame.emit(this.frame_slider);
   }
 
   public showBotSortTimeline(){
-    let new_frames = this.all_data.map((d: any)=>({"filename": d.filename, frame: parseInt(d.frame), botsort: d.botsort, n_people: d.n_people}));
-    this.filtered_data = new_frames.filter((d: any) => d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+    let new_frames = this.old_structure_data.map((d: any)=>({"filename": d.filename, frame: d.frame, people_id: d.people_id, n_people: d.n_people, model: d.model}));
+    this.filtered_data = new_frames.filter((d: any) => d.model === "botsort" && d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+    this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.people_id}`)))
     this.max_n_people = d3.max(this.filtered_data, d=>d.n_people);
-    this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.botsort.people_id}`)))
     this.height = this.margin.top + this.margin.bottom + (this.max_n_people) * 10
     this.show_botsort_timeline = true;
     this.createChart(this.filtered_data);
   }
 
   public showByteTrackTimeline(){
-    let new_frames = this.all_data.map((d: any)=>({"filename": d.filename, frame: parseInt(d.frame), botsort: d.botsort, n_people: d.n_people}));
-    this.filtered_data = new_frames.filter((d: any) => d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+    let new_frames = this.old_structure_data.map((d: any)=>({"filename": d.filename, frame: d.frame, people_id: d.people_id, n_people: d.n_people, model: d.model}));
+    this.filtered_data = new_frames.filter((d: any) => d.model === "bytetrack" && d.filename == this.current_filename && d.frame >= this.frame_slider - this.n && d.frame <= this.frame_slider + this.n)  
+    this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.people_id}`)))
     this.max_n_people = d3.max(this.filtered_data, d=>d.n_people);
-    this.people_in_scene = new Set(this.filtered_data.map(d=>(`ID #${d.botsort.people_id}`)))
     this.height = this.margin.top + this.margin.bottom + (this.max_n_people) * 10
     this.show_botsort_timeline = false;
     this.createChart(this.filtered_data);

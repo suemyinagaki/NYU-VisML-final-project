@@ -31,9 +31,10 @@ export class MetricsComponent {
   public botsort_bbox_list: any[] = [];
   public bytetrack_bbox_list: any[] = [];
   public botsort_score_list: any[] = [{'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}];
-  public bytetrack_score_list: any[] = [];
+  public bytetrack_score_list: any[] = [{'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}, {'id': '-', 'score': '-'}];
   public displayedColumns: string[] = ['ID', 'Score'];
-
+  public botsort_overlaps: number = 0;
+  public bytetrack_overlaps: number = 0;
 /*
   {
     "filename": "chase_1_sensor_1_left",
@@ -65,36 +66,41 @@ export class MetricsComponent {
         if (chng.currentValue){
           this.title = chng.currentValue['filename']; 
           this.frame = chng.currentValue['frame']; 
-          this.botsort_n_people = chng.currentValue['n_people']; //eu deveria mudar isso e colocar n_people dentro do botsort
-          this.bytetrack_n_people = chng.currentValue['n_people'];
-          this.botsort_score = chng.currentValue['botsort']['score'];
-          this.bytetrack_score = chng.currentValue['botsort']['score']; //mudar para bytetrack
+          this.botsort_n_people = chng.currentValue['botsort'][0]['n_people'];
+          this.bytetrack_n_people = chng.currentValue['bytetrack'][0]['n_people'];
+          this.botsort_score = chng.currentValue['botsort_avg_score']
+          this.bytetrack_score = chng.currentValue['bytetrack_avg_score']
+          this.botsort_overlaps = chng.currentValue['botsort'][0]['overlapping_bboxes'];
+          this.bytetrack_overlaps = chng.currentValue['bytetrack'][0]['overlapping_bboxes'];
 
-          // get all bbox area of this frame
-          this.botsort_bbox_list = []
-          //preciso mudar para bytetrack depois
-          this.bytetrack_bbox_list = [];
-
-
-          // get all scores of this frame
-          this.botsort_score_list = this.all_data.filter((d: any) => (d['frame'] == this.frame && d['filename'] == this.title)).sort((a: any, b: any) => d3.descending(a['botsort']['score'], b['botsort']['score'])).slice(0,5).map((d: any)=>({'id': d['botsort']['people_id'], 'score': d['botsort']['score']}));
-          //preciso mudar para bytetrack depois
-          this.bytetrack_score_list = this.all_data.filter((d: any) => (d['frame'] == this.frame && d['filename'] == this.title)).sort((a: any, b: any) => d3.descending(a['botsort']['score'], b['botsort']['score'])).slice(0,5).map((d: any)=>({'id': d['botsort']['people_id'], 'score': d['botsort']['score']})); 
+          this.botsort_score_list = chng.currentValue['botsort'].sort((a: any, b: any) => d3.descending(a['score'], b['score'])).slice(0,5).map((d: any)=>({'id': d['people_id'], 'score': d['score']}));
+          this.bytetrack_score_list = chng.currentValue['bytetrack'].sort((a: any, b: any) => d3.descending(a['score'], b['score'])).slice(0,5).map((d: any)=>({'id': d['people_id'], 'score': d['score']}));
+          while(this.botsort_score_list.length < 5){
+            this.botsort_score_list.push({"id": "-", "score": "-"})
+          }
+          while(this.bytetrack_score_list.length < 5){
+            this.bytetrack_score_list.push({"id": "-", "score": "-"})
+          }
         }
       }else if(propName == 'frame_slider'){
         this.frame = chng.currentValue; 
-        
-        let cur_frame = this.all_data.filter((d: any) => (d['filename'] == this.title && d['frame'] == this.frame))[0]
-        console.log("FRAME", cur_frame)
-        this.botsort_n_people = cur_frame['n_people']; //eu deveria mudar isso e colocar n_people dentro do botsort
-        this.bytetrack_n_people = cur_frame['n_people'];
-        this.botsort_score = cur_frame['botsort']['score'];
-        this.bytetrack_score = cur_frame['botsort']['score'];  //mudar para bytetrack
+        let cur_frame = this.all_data.filter((d: any) => (d['filename'] == this.title && d['frame'] == this.frame && d['botsort'].length > 0 && d['bytetrack'].length > 0))[0]
+        console.log("CURRENT FRAME", cur_frame)
+        this.botsort_n_people = cur_frame['botsort'][0]['n_people']; //eu deveria mudar isso e colocar n_people dentro do botsort
+        this.bytetrack_n_people = cur_frame['bytetrack'][0]['n_people'];
+        this.botsort_score = cur_frame['botsort_avg_score'];
+        this.bytetrack_score = cur_frame['bytetrack_avg_score'];
 
         // get all scores of this frame
-        this.botsort_score_list = this.all_data.filter((d: any) => (d['frame'] == this.frame && d['filename'] == this.title)).sort((a: any, b: any) => d3.descending(a['botsort']['score'], b['botsort']['score'])).slice(0,5).map((d: any)=>({'id': d['botsort']['people_id'], 'score': d['botsort']['score']}));
-        //preciso mudar para bytetrack depois
-        this.bytetrack_score_list = this.all_data.filter((d: any) => (d['frame'] == this.frame && d['filename'] == this.title)).sort((a: any, b: any) => d3.descending(a['botsort']['score'], b['botsort']['score'])).slice(0,5).map((d: any)=>({'id': d['botsort']['people_id'], 'score': d['botsort']['score']})); 
+        this.botsort_score_list = cur_frame['botsort'].sort((a: any, b: any) => d3.descending(a['score'], b['score'])).slice(0,5).map((d: any)=>({'id': d['people_id'], 'score': d['score']}));
+        this.bytetrack_score_list = cur_frame['bytetrack'].sort((a: any, b: any) => d3.descending(a['score'], b['score'])).slice(0,5).map((d: any)=>({'id': d['people_id'], 'score': d['score']})); 
+        
+        while(this.botsort_score_list.length < 5){
+          this.botsort_score_list.push({"id": "-", "score": "-"})
+        }
+        while(this.bytetrack_score_list.length < 5){
+          this.bytetrack_score_list.push({"id": "-", "score": "-"})
+        }
       }
     }
   }

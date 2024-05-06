@@ -8,7 +8,7 @@
     <div style="text-align: center; margin-top: 5px">{{this.title}}</div>
     
     <div class="metrics-title">People Detected</div>
-    <div style="display: flex; text-align: center; margin-left: 15%; margin-right: 15%;">
+    <div style="display: flex; text-align: center; margin-left: 13%; margin-right: 15%;">
         <div style="text-align: center;">
             <div class="botsort">Bot-SORT</div>
             <div style="font-size: 30px;">{{this.botsort_n_people}}</div>
@@ -66,7 +66,7 @@
         </div>
         <div style="text-align: center; margin-left: 20%;">
             <div class="bytetrack">ByteTrack</div>
-            @if(this.botsort_score_list != []){
+            @if(this.bytetrack_score_list != []){
                 <table class="tg">
                     <thead>
                       <tr>
@@ -76,24 +76,24 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="tg-m1v8">{{this.botsort_score_list[0]['id']}}</td>
-                        <td class="tg-m1v8">{{this.botsort_score_list[0]['score']}}</td>
+                        <td class="tg-m1v8">{{this.bytetrack_score_list[0]['id']}}</td>
+                        <td class="tg-m1v8">{{this.bytetrack_score_list[0]['score']}}</td>
                       </tr>
                       <tr>
-                        <td class="tg-6nwz">{{this.botsort_score_list[1]['id']}}</td>
-                        <td class="tg-6nwz">{{this.botsort_score_list[1]['score']}}</td>
+                        <td class="tg-6nwz">{{this.bytetrack_score_list[1]['id']}}</td>
+                        <td class="tg-6nwz">{{this.bytetrack_score_list[1]['score']}}</td>
                       </tr>
                       <tr>
-                        <td class="tg-ftn8">{{this.botsort_score_list[2]['id']}}</td>
-                        <td class="tg-ftn8">{{this.botsort_score_list[2]['score']}}</td>
+                        <td class="tg-ftn8">{{this.bytetrack_score_list[2]['id']}}</td>
+                        <td class="tg-ftn8">{{this.bytetrack_score_list[2]['score']}}</td>
                       </tr>
                       <tr>
-                        <td class="tg-6nwz">{{this.botsort_score_list[3]['id']}}</td>
-                        <td class="tg-6nwz">{{this.botsort_score_list[3]['score']}}</td>
+                        <td class="tg-6nwz">{{this.bytetrack_score_list[3]['id']}}</td>
+                        <td class="tg-6nwz">{{this.bytetrack_score_list[3]['score']}}</td>
                       </tr>
                       <tr>
-                        <td class="tg-ftn8">{{this.botsort_score_list[4]['id']}}</td>
-                        <td class="tg-ftn8">{{this.botsort_score_list[4]['score']}}</td>
+                        <td class="tg-ftn8">{{this.bytetrack_score_list[4]['id']}}</td>
+                        <td class="tg-ftn8">{{this.bytetrack_score_list[4]['score']}}</td>
                       </tr>
                     </tbody>
                     </table>
@@ -112,14 +112,14 @@
         </div>
     </div> -->
     <div class="metrics-title">Number of Overlaps</div>
-    <div style="display: flex; text-align: center; margin-left: 15%; margin-right: 15%;">
+    <div style="display: flex; text-align: center; margin-left: 13%; margin-right: 15%;">
         <div style="text-align: center;">
             <div class="botsort">Bot-SORT</div>
-            <div style="font-size: 30px;">5</div>
+            <div style="font-size: 30px;">{{this.botsort_overlaps}}</div>
         </div>
         <div style="text-align: center; margin-left: 30%;">
             <div class="bytetrack">ByteTrack</div>
-            <div style="font-size: 30px;">5</div>
+            <div style="font-size: 30px;">{{this.bytetrack_overlaps}}</div>
         </div>
     </div>
 </div>
