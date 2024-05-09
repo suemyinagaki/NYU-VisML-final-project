@@ -4,6 +4,8 @@ This project was developed for the final project of the Visualization for Machin
 Group Members: [Suemy Inagaki](https://github.com/suemyinagaki), [Juan Alvarado](https://github.com/Juanroalvarado) and Yichen Chi
 
 ![Tool Interface](images/visml-teaser.png)
+*Visualization tool to investigate failures in people re-identification models. In A we have the query parameters to filter the data to be investigated. Then, the query result will be displayed in B in an orderly manner. When you click on one of the results in B, the data will be loaded into C, D and E. C shows the main view, where it is possible to view the model outputs in more detail. In D we have a timeline to easily identify moments when people enter or leave the scene. Finally, in E, we have the metrics of the two models. These metrics are related to the model outputs in the frame displayed in the analytics panel.*
+
 
 ## StreetAware Dataset Analysis
 
